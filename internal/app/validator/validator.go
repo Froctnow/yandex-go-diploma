@@ -7,6 +7,7 @@ type validator struct{}
 
 type Validator interface {
 	UserRegister(request *httpmodels.RegisterRequest) *validate.Errors
+	UserLogin(request *httpmodels.LoginRequest) *validate.Errors
 }
 
 func New() Validator {

@@ -1,10 +1,15 @@
 package errors
 
-import "fmt"
-
 type UserAlreadyExistsError struct {
 }
 
 func (e UserAlreadyExistsError) Error() string {
-	return fmt.Sprintf("user already exists")
+	return "user already exists"
+}
+
+type IncorrectLoginPasswordError struct {
+}
+
+func (e IncorrectLoginPasswordError) Error() string {
+	return "incorrect login/password"
 }

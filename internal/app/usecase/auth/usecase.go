@@ -26,6 +26,7 @@ func NewUseCase(
 
 type UseCase interface {
 	Register(ctx context.Context, login string, password string) error
+	Login(ctx context.Context, login string, password string) error
 }
 
 func (u *authUseCase) hashPassword(password string) (string, error) {
@@ -34,7 +35,7 @@ func (u *authUseCase) hashPassword(password string) (string, error) {
 	return string(bytes), err
 }
 
-func (u *authUseCase) checkPasswordHash(password, hash string) bool {
+func (u *authUseCase) checkPasswordHash(password string, hash string) bool {
 	u.logger.Debug(fmt.Sprintf("checking password %s with %s", password, hash))
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil

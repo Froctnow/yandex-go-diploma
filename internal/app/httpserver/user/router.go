@@ -46,6 +46,7 @@ func NewRouter(
 
 	userGroup := ginGroup.Group("/user")
 	userGroup.POST("/register", router.Register)
+	userGroup.POST("/login", router.Login)
 
 	return router
 }
