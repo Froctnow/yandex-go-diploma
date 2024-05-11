@@ -7,8 +7,12 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/Froctnow/yandex-go-diploma/internal/app/client/pg"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/config"
+	"github.com/Froctnow/yandex-go-diploma/internal/app/gophermartprovider"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver"
+	"github.com/Froctnow/yandex-go-diploma/internal/app/migration"
+	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/auth"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/validator"
 	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
 )
@@ -20,6 +24,20 @@ func RunApp(ctx context.Context, cfg *config.Values, logger logger.LogClient) {
 		panic(fmt.Errorf("http server can't start %w", err))
 	}
 
+	err = migration.ExecuteMigrations(cfg, logger)
+
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	gophermartDBconn, err := pg.New(cfg, logger)
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	gophermartProvider := gophermartprovider.NewGophermartProvider(gophermartDBconn)
+
+	authUseCase := auth.NewUseCase(logger, gophermartProvider)
 	validatorInstance := validator.New()
 
 	_ = httpserver.NewGophermartServer(
@@ -27,6 +45,7 @@ func RunApp(ctx context.Context, cfg *config.Values, logger logger.LogClient) {
 		logger,
 		validatorInstance,
 		cfg,
+		authUseCase,
 	)
 
 	exit := make(chan os.Signal, 1)

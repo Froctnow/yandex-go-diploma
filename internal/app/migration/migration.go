@@ -13,7 +13,7 @@ import (
 )
 
 func ExecuteMigrations(cfg *config.Values, log logger.LogClient) error {
-	db, err := sql.Open("postgres", cfg.DatabaseDSN)
+	db, err := sql.Open("postgres", cfg.DatabaseURI)
 
 	if err != nil {
 		return fmt.Errorf("failed connect to database for migrations %w", err)

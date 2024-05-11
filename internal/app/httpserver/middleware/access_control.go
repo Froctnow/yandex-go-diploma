@@ -3,7 +3,6 @@ package middleware
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/Froctnow/yandex-go-diploma/internal/app/config"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/constants"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
 
@@ -27,22 +25,6 @@ func AccessControlMiddleware(cfg *config.Values, logger logger.LogClient) gin.Ha
 		if err != nil && !errors.Is(err, http.ErrNoCookie) {
 			logger.ErrorCtx(c, fmt.Errorf("can't get jwt token from cookie: %w", err))
 			c.AbortWithStatus(http.StatusInternalServerError)
-			return
-		}
-
-		if jwtToken == "" || errors.Is(err, http.ErrNoCookie) {
-			token, userID, err := buildJWTString(cfg.JwtSecret, cfg.JwtTokenExpire)
-
-			if err != nil {
-				logger.ErrorCtx(c, fmt.Errorf("can't build jwt token: %w", err))
-				c.AbortWithStatus(http.StatusInternalServerError)
-				return
-			}
-
-			c.SetCookie("jwt", token, int(cfg.JwtTokenExpire.Seconds()), "/", "", false, true)
-			c.Set(constants.ContextUserID, userID)
-			c.Next()
-
 			return
 		}
 
@@ -64,25 +46,6 @@ func AccessControlMiddleware(cfg *config.Values, logger logger.LogClient) gin.Ha
 
 		c.Next()
 	}
-}
-
-func buildJWTString(jwtSecret string, jwtTokenExpire time.Duration) (string, string, error) {
-	userID := uuid.New().String()
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(jwtTokenExpire)),
-		},
-		UserID: userID,
-	})
-
-	// создаём строку токена
-	tokenString, err := token.SignedString([]byte(jwtSecret))
-	if err != nil {
-		return "", "", fmt.Errorf("can't sign token: %w", err)
-	}
-
-	// возвращаем строку токена
-	return tokenString, userID, nil
 }
 
 func decodeJwtToken(jwtToken string, jwtSecret string) (*Claims, error) {

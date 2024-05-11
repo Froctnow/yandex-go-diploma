@@ -22,10 +22,10 @@ func New(cfg *config.Values, log logger.LogClient) (pgclient.PGClient, error) {
 	if cfg == nil {
 		return nil, fmt.Errorf("invalid pg config")
 	}
-	if cfg.DatabaseDSN == "" {
+	if cfg.DatabaseURI == "" {
 		return nil, nil
 	}
-	connString := cfg.DatabaseDSN
+	connString := cfg.DatabaseURI
 	configValues := pgclient.PostgreSQL{
 		ConnString:     connString,
 		PathsToQueries: pathsToDBQueries,
