@@ -33,7 +33,7 @@ func (r *userRouter) Login(ctx *gin.Context) {
 		return
 	}
 
-	err := r.authUseCase.Login(ctx, req.Login, req.Password)
+	userID, err := r.authUseCase.Login(ctx, req.Login, req.Password)
 
 	if err != nil && errors.As(err, &autherrors.IncorrectLoginPasswordError{}) {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
@@ -46,7 +46,7 @@ func (r *userRouter) Login(ctx *gin.Context) {
 		return
 	}
 
-	err = r.authorizeUser(ctx, req.Login)
+	err = r.authorizeUser(ctx, userID)
 
 	if err != nil {
 		r.logger.ErrorCtx(ctx, fmt.Errorf("failed authorize user"))

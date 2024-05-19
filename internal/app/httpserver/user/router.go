@@ -7,7 +7,9 @@ import (
 
 	"github.com/Froctnow/yandex-go-diploma/internal/app/config"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/constants"
+	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/middleware"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/auth"
+	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/order"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/validator"
 	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
 	"github.com/gin-gonic/gin"
@@ -24,10 +26,11 @@ type Router interface {
 }
 
 type userRouter struct {
-	authUseCase auth.UseCase
-	validator   validator.Validator
-	cfg         *config.Values
-	logger      logger.LogClient
+	authUseCase  auth.UseCase
+	validator    validator.Validator
+	cfg          *config.Values
+	logger       logger.LogClient
+	orderUseCase order.UseCase
 }
 
 func NewRouter(
@@ -36,17 +39,20 @@ func NewRouter(
 	validator validator.Validator,
 	cfg *config.Values,
 	logger logger.LogClient,
+	orderUseCase order.UseCase,
 ) Router {
 	router := &userRouter{
-		authUseCase: authUseCase,
-		validator:   validator,
-		cfg:         cfg,
-		logger:      logger,
+		authUseCase:  authUseCase,
+		validator:    validator,
+		cfg:          cfg,
+		logger:       logger,
+		orderUseCase: orderUseCase,
 	}
 
 	userGroup := ginGroup.Group("/user")
 	userGroup.POST("/register", router.Register)
 	userGroup.POST("/login", router.Login)
+	userGroup.POST("/orders", middleware.AccessControlMiddleware(cfg, logger), router.CreateOrder)
 
 	return router
 }

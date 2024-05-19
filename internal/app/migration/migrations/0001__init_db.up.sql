@@ -7,3 +7,19 @@ CREATE TABLE gophermart.users
     password   TEXT        NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TYPE gophermart.order_status AS ENUM (
+    'NEW',
+    'PROCESSING',
+    'INVALID',
+    'PROCESSED'
+    );
+
+CREATE TABLE gophermart.orders
+(
+    number      TEXT PRIMARY KEY,
+    user_id     uuid                    NOT NULL REFERENCES gophermart.users (id),
+    accrual     INTEGER,
+    status      gophermart.order_status NOT NULL DEFAULT 'NEW'::gophermart.order_status,
+    uploaded_at TIMESTAMP WITH TIME ZONE         DEFAULT NOW()
+);

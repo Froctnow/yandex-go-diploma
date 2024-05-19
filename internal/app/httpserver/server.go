@@ -5,6 +5,7 @@ import (
 	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/middleware"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/user"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/auth"
+	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/order"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/validator"
 	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,7 @@ func NewGophermartServer(
 	validator validator.Validator,
 	cfg *config.Values,
 	authUseCase auth.UseCase,
+	orderUseCase order.UseCase,
 ) GophermartServer {
 	ginEngine.Use(gin.Recovery())
 
@@ -32,6 +34,6 @@ func NewGophermartServer(
 	apiGroup.Use(middleware.CompressMiddleware())
 
 	return &gophermartServer{
-		user.NewRouter(apiGroup, authUseCase, validator, cfg, logger),
+		user.NewRouter(apiGroup, authUseCase, validator, cfg, logger, orderUseCase),
 	}
 }

@@ -16,7 +16,7 @@ func (u *authUseCase) Register(ctx context.Context, login string, password strin
 		return err
 	}
 
-	user, err := u.provider.CreateUser(ctx, nil, login, hashPassword)
+	userID, err := u.provider.CreateUser(ctx, nil, login, hashPassword)
 
 	if err != nil {
 		err = fmt.Errorf("can't create user: %w", err)
@@ -24,7 +24,7 @@ func (u *authUseCase) Register(ctx context.Context, login string, password strin
 		return err
 	}
 
-	if user.ID == "" {
+	if userID == "" {
 		err = errors.UserAlreadyExistsError{}
 		u.logger.ErrorCtx(ctx, err)
 		return err

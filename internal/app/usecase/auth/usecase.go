@@ -26,7 +26,7 @@ func NewUseCase(
 
 type UseCase interface {
 	Register(ctx context.Context, login string, password string) error
-	Login(ctx context.Context, login string, password string) error
+	Login(ctx context.Context, login string, password string) (string, error)
 }
 
 func (u *authUseCase) hashPassword(password string) (string, error) {

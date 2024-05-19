@@ -13,8 +13,12 @@ type GophermartProvider interface {
 	RollbackTransaction(tx pgclient.Transaction, log logger.LogClient)
 	CommitTransaction(tx pgclient.Transaction) error
 
-	// CreateUser - создает нового пользователя в базе данных и возвращает его
-	CreateUser(ctx context.Context, tx pgclient.Transaction, login string, password string) (models.User, error)
+	// CreateUser - создает нового пользователя в базе данных и возвращает его ID
+	CreateUser(ctx context.Context, tx pgclient.Transaction, login string, password string) (string, error)
 	// GetUserForLogin - возвращает пользователя по логину и паролю
 	GetUserForLogin(ctx context.Context, tx pgclient.Transaction, login string) (models.User, error)
+	// CreateOrder - создает новый заказ в базе данных и возвращает его номер
+	CreateOrder(ctx context.Context, tx pgclient.Transaction, orderNumber string, userID string) (string, error)
+	// CheckUserOrder - проверят есть ли в базе номер заказа у пользователя
+	CheckUserOrder(ctx context.Context, tx pgclient.Transaction, orderNumber string, userID string) (bool, error)
 }
