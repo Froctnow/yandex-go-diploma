@@ -33,7 +33,7 @@ func (r *userRouter) Register(ctx *gin.Context) {
 		return
 	}
 
-	err := r.authUseCase.Register(ctx, req.Login, req.Password)
+	userID, err := r.authUseCase.Register(ctx, req.Login, req.Password)
 
 	if err != nil && errors.As(err, &autherrors.UserAlreadyExistsError{}) {
 		ctx.AbortWithStatus(http.StatusConflict)
@@ -46,7 +46,7 @@ func (r *userRouter) Register(ctx *gin.Context) {
 		return
 	}
 
-	err = r.authorizeUser(ctx, req.Login)
+	err = r.authorizeUser(ctx, userID)
 
 	if err != nil {
 		r.logger.ErrorCtx(ctx, fmt.Errorf("failed authorize user"))
