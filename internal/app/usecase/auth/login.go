@@ -9,7 +9,6 @@ import (
 
 func (u *authUseCase) Login(ctx context.Context, login string, password string) (string, error) {
 	user, err := u.provider.GetUserForLogin(ctx, nil, login)
-
 	if err != nil {
 		err = fmt.Errorf("can't get user for login: %w", err)
 		u.logger.ErrorCtx(ctx, err)

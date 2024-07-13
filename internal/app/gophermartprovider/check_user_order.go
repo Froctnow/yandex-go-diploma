@@ -26,7 +26,6 @@ func (p *GophermartDBProvider) CheckUserOrder(
 	}
 
 	err = rows.Err()
-
 	if err != nil {
 		return false, fmt.Errorf("can't execute CheckUserOrder: %w", err)
 	}

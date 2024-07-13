@@ -32,7 +32,6 @@ func DecompressMiddleware(logger logger.LogClient) gin.HandlerFunc {
 		}
 
 		gzipReader, err := gzip.NewReader(c.Request.Body)
-
 		if err != nil {
 			logger.Error(fmt.Errorf("can't get gzip reader: %w", err))
 			c.AbortWithStatusJSON(http.StatusInternalServerError, httpmodels.ErrorResponse{Error: "can't get gzip reader"})

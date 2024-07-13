@@ -14,13 +14,11 @@ func main() {
 	defer cancel()
 
 	cfg, err := config.NewConfig(true)
-
 	if err != nil {
 		panic(fmt.Errorf("config read err %w", err))
 	}
 
 	logger, err := log.New(*cfg)
-
 	if err != nil {
 		panic(err)
 	}

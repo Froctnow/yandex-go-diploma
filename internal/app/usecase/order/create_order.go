@@ -9,14 +9,12 @@ import (
 
 func (u *orderUseCase) Create(ctx context.Context, orderNumber string, userID string) error {
 	err := u.checkUserOrder(ctx, orderNumber, userID)
-
 	if err != nil {
 		u.logger.ErrorCtx(ctx, err)
 		return err
 	}
 
 	insertedOrderNumber, err := u.provider.CreateOrder(ctx, nil, orderNumber, userID)
-
 	if err != nil {
 		err = fmt.Errorf("failed to create order: %w", err)
 		u.logger.ErrorCtx(ctx, err)
@@ -25,7 +23,6 @@ func (u *orderUseCase) Create(ctx context.Context, orderNumber string, userID st
 
 	if insertedOrderNumber == "" {
 		err = u.checkUserOrder(ctx, orderNumber, userID)
-
 		if err != nil {
 			u.logger.ErrorCtx(ctx, err)
 			return err
@@ -39,7 +36,6 @@ func (u *orderUseCase) Create(ctx context.Context, orderNumber string, userID st
 
 func (u *orderUseCase) checkUserOrder(ctx context.Context, orderNumber string, userID string) error {
 	isUserOrderExists, err := u.provider.CheckUserOrder(ctx, nil, orderNumber, userID)
-
 	if err != nil {
 		return fmt.Errorf("failed to check user order: %w", err)
 	}

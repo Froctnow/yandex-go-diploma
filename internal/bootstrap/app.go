@@ -26,7 +26,6 @@ func RunApp(ctx context.Context, cfg *config.Values, logger logger.LogClient) {
 	}
 
 	err = migration.ExecuteMigrations(cfg, logger)
-
 	if err != nil {
 		logger.Fatal(err)
 	}

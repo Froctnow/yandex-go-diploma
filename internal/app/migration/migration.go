@@ -5,22 +5,21 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Froctnow/yandex-go-diploma/internal/app/config"
-	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+
+	"github.com/Froctnow/yandex-go-diploma/internal/app/config"
+	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
 )
 
 func ExecuteMigrations(cfg *config.Values, log logger.LogClient) error {
 	db, err := sql.Open("postgres", cfg.DatabaseURI)
-
 	if err != nil {
 		return fmt.Errorf("failed connect to database for migrations %w", err)
 	}
 
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
-
 	if err != nil {
 		return fmt.Errorf("failed create postgres instance for migrate %w", err)
 	}
@@ -30,13 +29,11 @@ func ExecuteMigrations(cfg *config.Values, log logger.LogClient) error {
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://internal/app/migration/migrations",
 		"postgres", driver)
-
 	if err != nil {
 		return fmt.Errorf("failed create migration instance %w", err)
 	}
 
 	currentVersion, err := getMigrationsVersion(m)
-
 	if err != nil {
 		return err
 	}
@@ -50,7 +47,6 @@ func ExecuteMigrations(cfg *config.Values, log logger.LogClient) error {
 	}
 
 	newVersion, err := getMigrationsVersion(m)
-
 	if err != nil {
 		return err
 	}

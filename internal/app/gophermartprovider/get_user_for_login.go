@@ -25,7 +25,6 @@ func (p *GophermartDBProvider) GetUserForLogin(
 	}
 
 	err = rows.Err()
-
 	if err != nil {
 		return models.User{}, fmt.Errorf("can't execute GetUserForLogin: %w", err)
 	}

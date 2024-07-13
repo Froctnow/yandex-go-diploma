@@ -39,8 +39,7 @@ func NewLogAdapter(l LogClient) *LogAdapter {
 }
 
 // Log common log method
-func (l *LogAdapter) Log(ctx context.Context, level pgx.LogLevel, msg string, data map[string]interface{}) {
-
+func (l *LogAdapter) Log(ctx context.Context, level pgx.LogLevel, msg string, _ map[string]interface{}) {
 	switch level {
 	case pgx.LogLevelTrace:
 		l.log.TraceCtx(ctx, msg)

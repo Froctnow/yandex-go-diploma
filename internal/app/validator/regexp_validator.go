@@ -17,7 +17,6 @@ type RegexpValidator struct {
 
 func (v *RegexpValidator) IsValid(errors *validate.Errors) {
 	isMatched, err := regexp.MatchString(v.Pattern, v.Field)
-
 	if err != nil {
 		errors.Add(v.Name, err.Error())
 		return

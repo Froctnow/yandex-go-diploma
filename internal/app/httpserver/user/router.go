@@ -67,7 +67,6 @@ func (r *userRouter) checkHeaderContentType(value string) bool {
 // authorizeUser авторизует пользователя и устанавливает куки
 func (r *userRouter) authorizeUser(c *gin.Context, userID string) error {
 	token, err := buildJWTString(r.cfg.JwtSecret, r.cfg.JwtTokenExpire, userID)
-
 	if err != nil {
 		r.logger.ErrorCtx(c, fmt.Errorf("can't build jwt token: %w", err))
 		return err

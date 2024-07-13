@@ -8,7 +8,6 @@ import (
 
 func (v *validator) UserCreateOrder(orderNumber string) *validate.Errors {
 	numericOrderNumber, err := strconv.Atoi(orderNumber)
-
 	if err != nil {
 		errors := validate.NewErrors()
 

@@ -27,7 +27,6 @@ func (p *GophermartDBProvider) CreateUser(
 	}
 
 	err = rows.Err()
-
 	if err != nil {
 		return "", fmt.Errorf("can't execute CreateUser: %w", err)
 	}

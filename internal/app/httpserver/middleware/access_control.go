@@ -18,8 +18,7 @@ type Claims struct {
 	UserID string `json:"user_id"`
 }
 
-type TokenIsInvalid struct {
-}
+type TokenIsInvalid struct{}
 
 func (e TokenIsInvalid) Error() string {
 	return "token is invalid"

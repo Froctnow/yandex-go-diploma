@@ -11,8 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type GophermartServer interface {
-}
+type GophermartServer interface{}
 
 type gophermartServer struct {
 	userRouter user.Router

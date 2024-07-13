@@ -33,5 +33,4 @@ func RunHTTPServer(
 	}()
 
 	return server, nil
-
 }

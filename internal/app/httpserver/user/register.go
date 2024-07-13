@@ -47,7 +47,6 @@ func (r *userRouter) Register(ctx *gin.Context) {
 	}
 
 	err = r.authorizeUser(ctx, userID)
-
 	if err != nil {
 		r.logger.ErrorCtx(ctx, fmt.Errorf("failed authorize user"))
 		ctx.AbortWithStatus(http.StatusInternalServerError)

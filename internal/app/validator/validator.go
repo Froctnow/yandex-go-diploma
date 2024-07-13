@@ -1,7 +1,9 @@
 package validator
 
-import "github.com/gobuffalo/validate"
-import httpmodels "github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/models"
+import (
+	httpmodels "github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/models"
+	"github.com/gobuffalo/validate"
+)
 
 type validator struct{}
 

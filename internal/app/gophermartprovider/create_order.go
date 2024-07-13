@@ -27,7 +27,6 @@ func (p *GophermartDBProvider) CreateOrder(
 	}
 
 	err = rows.Err()
-
 	if err != nil {
 		return "", fmt.Errorf("can't execute CreateOrder: %w", err)
 	}

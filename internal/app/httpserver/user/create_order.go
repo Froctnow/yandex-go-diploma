@@ -24,7 +24,6 @@ func (r *userRouter) CreateOrder(ctx *gin.Context) {
 	}
 
 	body, err := io.ReadAll(ctx.Request.Body)
-
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, httpmodels.ErrorResponse{Error: "Something went wrong"})
 		return
