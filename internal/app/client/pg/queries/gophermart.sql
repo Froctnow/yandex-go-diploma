@@ -26,7 +26,7 @@ SELECT EXISTS(SELECT 1 FROM gophermart.orders WHERE number = $1 AND user_id = $2
 SELECT number, status, accrual, uploaded_at
 FROM gophermart.orders
 WHERE user_id = $1
-ORDER BY created_at DESC;
+ORDER BY uploaded_at DESC;
 {{end}}
 
 {{define "ExpandOrder"}}

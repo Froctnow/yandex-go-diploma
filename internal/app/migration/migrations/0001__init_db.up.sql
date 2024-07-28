@@ -6,7 +6,7 @@ CREATE TABLE gophermart.users
     login      TEXT UNIQUE              NOT NULL,
     password   TEXT                     NOT NULL,
     balance    NUMERIC(10, 2) DEFAULT 0 NOT NULL,
-    created_at TIMESTAMP      DEFAULT NOW()
+    uploaded_at TIMESTAMP      DEFAULT NOW()
 );
 
 CREATE TYPE gophermart.order_status AS ENUM (
