@@ -19,7 +19,7 @@ CREATE TABLE gophermart.orders
 (
     number      TEXT PRIMARY KEY,
     user_id     uuid                    NOT NULL REFERENCES gophermart.users (id),
-    accrual     INTEGER,
+    accrual     NUMERIC(10,2),
     status      gophermart.order_status NOT NULL DEFAULT 'NEW'::gophermart.order_status,
     uploaded_at TIMESTAMP WITH TIME ZONE         DEFAULT NOW()
 );

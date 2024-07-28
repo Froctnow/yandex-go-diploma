@@ -11,7 +11,7 @@ func (p *GophermartDBProvider) ExpandOrder(
 	ctx context.Context,
 	tx pgclient.Transaction,
 	status string,
-	accrual *uint32,
+	accrual *float32,
 	userID string,
 ) error {
 	_, err := p.conn.Exec(
