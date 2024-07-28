@@ -5,6 +5,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
+
 	"github.com/Froctnow/yandex-go-diploma/internal/app/config"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/constants"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/middleware"
@@ -12,8 +15,6 @@ import (
 	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/order"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/validator"
 	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
 )
 
 type Claims struct {
@@ -53,6 +54,7 @@ func NewRouter(
 	userGroup.POST("/register", router.Register)
 	userGroup.POST("/login", router.Login)
 	userGroup.POST("/orders", middleware.AccessControlMiddleware(cfg, logger), router.CreateOrder)
+	userGroup.GET("/orders", middleware.AccessControlMiddleware(cfg, logger), router.GetOrders)
 
 	return router
 }

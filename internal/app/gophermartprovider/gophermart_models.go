@@ -21,4 +21,8 @@ type GophermartProvider interface {
 	CreateOrder(ctx context.Context, tx pgclient.Transaction, orderNumber string, userID string) (string, error)
 	// CheckUserOrder - проверят есть ли в базе номер заказа у пользователя
 	CheckUserOrder(ctx context.Context, tx pgclient.Transaction, orderNumber string, userID string) (bool, error)
+	// GetOrders - берем все заказы пользователя из нашей базы данных
+	GetOrders(ctx context.Context, tx pgclient.Transaction, userID string) ([]models.Order, error)
+	// ExpandOrder - добавить информацию о заказе из accrual сервиса
+	ExpandOrder(ctx context.Context, tx pgclient.Transaction, status string, accrual *uint32, userID string) error
 }

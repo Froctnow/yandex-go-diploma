@@ -37,8 +37,9 @@ func RunApp(ctx context.Context, cfg *config.Values, logger logger.LogClient) {
 
 	gophermartProvider := gophermartprovider.NewGophermartProvider(gophermartDBconn)
 
+	accrualsService := NewAccrualsService(cfg.AccrualSystemAddress, logger)
 	authUseCase := auth.NewUseCase(logger, gophermartProvider)
-	orderUseCase := order.NewUseCase(logger, gophermartProvider)
+	orderUseCase := order.NewUseCase(logger, gophermartProvider, accrualsService)
 	validatorInstance := validator.New()
 
 	_ = httpserver.NewGophermartServer(

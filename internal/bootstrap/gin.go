@@ -20,6 +20,8 @@ func RunHTTPServer(
 	ginEngine *gin.Engine,
 	cfg *config.Values,
 ) (*http.Server, error) {
+	fmt.Println(cfg.Address)
+
 	server := &http.Server{
 		Addr:              cfg.Address,
 		Handler:           ginEngine,

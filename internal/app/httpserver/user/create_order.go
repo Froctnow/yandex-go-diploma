@@ -6,17 +6,18 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/constants"
 	httpmodels "github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/models"
 	ordererrors "github.com/Froctnow/yandex-go-diploma/internal/app/usecase/order/errors"
-	"github.com/gin-gonic/gin"
 
 	"github.com/pkg/errors"
 )
 
 func (r *userRouter) CreateOrder(ctx *gin.Context) {
 	headerContentType := ctx.GetHeader("Content-Type")
-	isCorrectHeaderContentType := checkHeaderContentType(headerContentType)
+	isCorrectHeaderContentType := checkCreateOrderHeaders(headerContentType)
 
 	if !isCorrectHeaderContentType {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, httpmodels.ErrorResponse{Error: constants.MessageErrorIncorrectContentType})
@@ -59,7 +60,7 @@ func (r *userRouter) CreateOrder(ctx *gin.Context) {
 	ctx.Status(http.StatusAccepted)
 }
 
-func checkHeaderContentType(value string) bool {
+func checkCreateOrderHeaders(value string) bool {
 	isTextPlain := strings.Contains(value, "text/plain")
 
 	return isTextPlain
