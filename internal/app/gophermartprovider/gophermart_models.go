@@ -25,4 +25,16 @@ type GophermartProvider interface {
 	GetOrders(ctx context.Context, tx pgclient.Transaction, userID string) ([]models.Order, error)
 	// ExpandOrder - добавить информацию о заказе из accrual сервиса
 	ExpandOrder(ctx context.Context, tx pgclient.Transaction, status string, accrual *float32, userID string) error
+	// GetUserBalance - возвращает баланс пользователя
+	GetUserBalance(ctx context.Context, tx pgclient.Transaction, userID string) (float32, error)
+	// GetUserWithdrawn - возвращает сумму потраченных баллов пользователя
+	GetUserWithdrawn(ctx context.Context, tx pgclient.Transaction, userID string) (float32, error)
+	// GetUserBalanceForUpdate - возвращает баланс пользователя для обновления
+	GetUserBalanceForUpdate(ctx context.Context, tx pgclient.Transaction, userID string) (float32, error)
+	// CreateWithdrawTransaction - создает транзакцию списания средств
+	CreateWithdrawTransaction(ctx context.Context, tx pgclient.Transaction, userID string, sum float32, orderNumber string) error
+	// UpdateUserBalance - обновляет баланс пользователя
+	UpdateUserBalance(ctx context.Context, tx pgclient.Transaction, userID string, sum float32) error
+	// GetUserWithdraws - возвращает все списания пользователя
+	GetUserWithdraws(ctx context.Context, tx pgclient.Transaction, userID string) ([]models.Withdraw, error)
 }

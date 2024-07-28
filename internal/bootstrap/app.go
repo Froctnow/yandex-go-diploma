@@ -14,6 +14,7 @@ import (
 	"github.com/Froctnow/yandex-go-diploma/internal/app/migration"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/auth"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/order"
+	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/user"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/validator"
 	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
 )
@@ -40,6 +41,7 @@ func RunApp(ctx context.Context, cfg *config.Values, logger logger.LogClient) {
 	accrualsService := NewAccrualsService(cfg.AccrualSystemAddress, logger)
 	authUseCase := auth.NewUseCase(logger, gophermartProvider)
 	orderUseCase := order.NewUseCase(logger, gophermartProvider, accrualsService)
+	userUseCase := user.NewUseCase(logger, gophermartProvider)
 	validatorInstance := validator.New()
 
 	_ = httpserver.NewGophermartServer(
@@ -49,6 +51,7 @@ func RunApp(ctx context.Context, cfg *config.Values, logger logger.LogClient) {
 		cfg,
 		authUseCase,
 		orderUseCase,
+		userUseCase,
 	)
 
 	exit := make(chan os.Signal, 1)

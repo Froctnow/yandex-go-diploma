@@ -13,6 +13,7 @@ import (
 	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/middleware"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/auth"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/order"
+	"github.com/Froctnow/yandex-go-diploma/internal/app/usecase/user"
 	"github.com/Froctnow/yandex-go-diploma/internal/app/validator"
 	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
 )
@@ -32,6 +33,7 @@ type userRouter struct {
 	cfg          *config.Values
 	logger       logger.LogClient
 	orderUseCase order.UseCase
+	userUseCase  user.UseCase
 }
 
 func NewRouter(
@@ -41,6 +43,8 @@ func NewRouter(
 	cfg *config.Values,
 	logger logger.LogClient,
 	orderUseCase order.UseCase,
+	useUseCase user.UseCase,
+
 ) Router {
 	router := &userRouter{
 		authUseCase:  authUseCase,
@@ -48,6 +52,7 @@ func NewRouter(
 		cfg:          cfg,
 		logger:       logger,
 		orderUseCase: orderUseCase,
+		userUseCase:  useUseCase,
 	}
 
 	userGroup := ginGroup.Group("/user")
@@ -55,6 +60,9 @@ func NewRouter(
 	userGroup.POST("/login", router.Login)
 	userGroup.POST("/orders", middleware.AccessControlMiddleware(cfg, logger), router.CreateOrder)
 	userGroup.GET("/orders", middleware.AccessControlMiddleware(cfg, logger), router.GetOrders)
+	userGroup.GET("/balance", middleware.AccessControlMiddleware(cfg, logger), router.GetBalance)
+	userGroup.POST("/balance/withdraw", middleware.AccessControlMiddleware(cfg, logger), router.Withdraw)
+	userGroup.GET("/balance/withdrawals", middleware.AccessControlMiddleware(cfg, logger), router.GetWithdraws)
 
 	return router
 }
