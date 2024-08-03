@@ -37,4 +37,6 @@ type GophermartProvider interface {
 	UpdateUserBalance(ctx context.Context, tx pgclient.Transaction, userID string, sum float32) error
 	// GetUserWithdraws - возвращает все списания пользователя
 	GetUserWithdraws(ctx context.Context, tx pgclient.Transaction, userID string) ([]models.Withdraw, error)
+	// IncreaseUserBalance - увеличивает баланс пользователя
+	IncreaseUserBalance(ctx context.Context, tx pgclient.Transaction, userID string, sum float32) error
 }

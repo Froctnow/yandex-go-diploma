@@ -62,6 +62,10 @@ VALUES ($1, $2, $3);
 UPDATE gophermart.users SET balance = $1 WHERE id = $2;
 {{end}}
 
+{{define "IncreaseUserBalance"}}
+UPDATE gophermart.users SET balance = balance + $1 WHERE id = $2;
+{{end}}
+
 {{define "GetUserWithdraws"}}
 SELECT sum, order_number, processed_at
 FROM gophermart.transactions
