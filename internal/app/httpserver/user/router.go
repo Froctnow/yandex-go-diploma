@@ -44,7 +44,6 @@ func NewRouter(
 	logger logger.LogClient,
 	orderUseCase order.UseCase,
 	useUseCase user.UseCase,
-
 ) Router {
 	router := &userRouter{
 		authUseCase:  authUseCase,
@@ -62,7 +61,7 @@ func NewRouter(
 	userGroup.GET("/orders", middleware.AccessControlMiddleware(cfg, logger), router.GetOrders)
 	userGroup.GET("/balance", middleware.AccessControlMiddleware(cfg, logger), router.GetBalance)
 	userGroup.POST("/balance/withdraw", middleware.AccessControlMiddleware(cfg, logger), router.Withdraw)
-	userGroup.GET("/balance/withdrawals", middleware.AccessControlMiddleware(cfg, logger), router.GetWithdraws)
+	userGroup.GET("/withdrawals", middleware.AccessControlMiddleware(cfg, logger), router.GetWithdraws)
 
 	return router
 }

@@ -12,7 +12,6 @@ import (
 
 func (u *orderUseCase) GetOrders(ctx context.Context, userID string) ([]models.Order, error) {
 	orders, err := u.provider.GetOrders(ctx, nil, userID)
-
 	if err != nil {
 		u.logger.ErrorCtx(ctx, fmt.Errorf("can't get orders: %w", err))
 		return nil, err
@@ -28,10 +27,15 @@ func (u *orderUseCase) GetOrders(ctx context.Context, userID string) ([]models.O
 		order := order
 		errs.Go(func() error {
 			result, err := u.expandOrder(errGroupCtx, order, userID)
-
 			// Если не удалось расширить заказ, то пропускаем его, а не возвращаем ошибку
 			if err != nil {
-				u.logger.ErrorCtx(ctx, fmt.Errorf("can't expand order: %w", err))
+				resultOrders = append(resultOrders, models.Order{
+					Number:     order.Number,
+					Status:     order.Status,
+					Accrual:    order.Accrual,
+					UploadedAt: order.UploadedAt,
+				})
+				u.logger.ErrorCtx(errGroupCtx, fmt.Errorf("can't expand order: %w", err))
 				return nil
 			}
 
@@ -42,7 +46,6 @@ func (u *orderUseCase) GetOrders(ctx context.Context, userID string) ([]models.O
 	}
 
 	err = errs.Wait()
-
 	if err != nil {
 		u.logger.ErrorCtx(ctx, fmt.Errorf("can't expand orders: %w", err))
 		return nil, err
@@ -80,14 +83,12 @@ func (u *orderUseCase) expandOrder(ctx context.Context, order providermodels.Ord
 	expandedOrder.Status = accrualOrderInfo.Status
 
 	tx, err := u.provider.BeginTransaction()
-
 	if err != nil {
 		u.logger.ErrorCtx(ctx, fmt.Errorf("can't begin transaction: %w", err))
 		return models.Order{}, err
 	}
 
-	err = u.provider.ExpandOrder(ctx, tx, order.Status, order.Accrual, userID)
-
+	err = u.provider.ExpandOrder(ctx, tx, expandedOrder.Status, expandedOrder.Accrual, expandedOrder.Number)
 	if err != nil {
 		u.logger.ErrorCtx(ctx, fmt.Errorf("can't expand order: %w", err))
 		return models.Order{}, err
@@ -98,6 +99,8 @@ func (u *orderUseCase) expandOrder(ctx context.Context, order providermodels.Ord
 	if expandedOrder.Status == "PROCESSED" {
 		err = u.provider.IncreaseUserBalance(ctx, tx, userID, *expandedOrder.Accrual)
 
+		u.logger.InfoCtx(ctx, "user balance increased", "userID", userID, "sum", *expandedOrder.Accrual)
+
 		if err != nil {
 			u.provider.RollbackTransaction(tx, u.logger)
 			u.logger.ErrorCtx(ctx, fmt.Errorf("can't increase user balance: %w", err))
@@ -106,7 +109,6 @@ func (u *orderUseCase) expandOrder(ctx context.Context, order providermodels.Ord
 	}
 
 	err = u.provider.CommitTransaction(tx)
-
 	if err != nil {
 		u.logger.ErrorCtx(ctx, fmt.Errorf("can't commit transaction: %w", err))
 		return models.Order{}, err

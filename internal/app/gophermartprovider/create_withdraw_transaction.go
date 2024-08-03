@@ -14,7 +14,7 @@ func (p *GophermartDBProvider) CreateWithdrawTransaction(
 	sum float32,
 	orderNumber string,
 ) error {
-	_, err := p.conn.NamedQueryxContext(
+	_, err := p.conn.Exec(
 		ctx,
 		"CreateWithdrawTransaction",
 		nil,

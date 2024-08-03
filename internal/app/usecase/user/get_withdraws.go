@@ -9,7 +9,6 @@ import (
 
 func (u *userUseCase) GetWithdraws(ctx context.Context, userID string) ([]models.UserWithdraw, error) {
 	withdraws, err := u.provider.GetUserWithdraws(ctx, nil, userID)
-
 	if err != nil {
 		u.logger.ErrorCtx(ctx, fmt.Errorf("can't get user balance: %w", err))
 		return nil, err

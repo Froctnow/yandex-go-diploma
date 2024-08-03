@@ -30,7 +30,7 @@ ORDER BY uploaded_at DESC;
 {{end}}
 
 {{define "ExpandOrder"}}
-UPDATE gophermart.orders SET status = $1, accrual = $2 WHERE user_id = $3
+UPDATE gophermart.orders SET status = $1, accrual = $2 WHERE number = $3
 {{end}}
 
 {{define "GetUserBalance"}}

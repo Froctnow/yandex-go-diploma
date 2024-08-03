@@ -13,7 +13,6 @@ func (r *userRouter) GetOrders(ctx *gin.Context) {
 	userID := ctx.GetString(constants.ContextUserID)
 
 	response, err := r.orderUseCase.GetOrders(ctx, userID)
-
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, httpmodels.ErrorResponse{Error: err.Error()})
 		return

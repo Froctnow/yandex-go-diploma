@@ -21,7 +21,6 @@ func (f *accrualsServiceAPI) GetOrder(ctx context.Context, orderNumber string) (
 	response := &GetOrderResponse{}
 
 	err = jsoniter.Unmarshal(buf, response)
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}

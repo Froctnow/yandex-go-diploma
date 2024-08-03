@@ -13,7 +13,6 @@ func (r *userRouter) GetWithdraws(ctx *gin.Context) {
 	userID := ctx.GetString(constants.ContextUserID)
 
 	response, err := r.userUseCase.GetWithdraws(ctx, userID)
-
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, httpmodels.ErrorResponse{Error: err.Error()})
 		return

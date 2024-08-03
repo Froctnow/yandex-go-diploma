@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Froctnow/yandex-go-diploma/internal/app/config"
-	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/constants"
-	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
-
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/pkg/errors"
+
+	"github.com/Froctnow/yandex-go-diploma/internal/app/config"
+	"github.com/Froctnow/yandex-go-diploma/internal/app/httpserver/constants"
+	"github.com/Froctnow/yandex-go-diploma/pkg/logger"
 )
 
 type Claims struct {

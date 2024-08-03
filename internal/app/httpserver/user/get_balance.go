@@ -13,7 +13,6 @@ func (r *userRouter) GetBalance(ctx *gin.Context) {
 	userID := ctx.GetString(constants.ContextUserID)
 
 	userBalance, err := r.userUseCase.GetBalance(ctx, userID)
-
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, httpmodels.ErrorResponse{Error: err.Error()})
 		return

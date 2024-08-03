@@ -13,7 +13,7 @@ func (p *GophermartDBProvider) UpdateUserBalance(
 	userID string,
 	sum float32,
 ) error {
-	_, err := p.conn.NamedQueryxContext(
+	_, err := p.conn.Exec(
 		ctx,
 		"UpdateUserBalance",
 		nil,
