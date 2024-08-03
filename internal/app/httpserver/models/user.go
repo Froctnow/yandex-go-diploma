@@ -11,7 +11,7 @@ type LoginRequest struct {
 }
 
 type GetUserBalanceResponse struct {
-	Balance   float32 `json:"balance"`
+	Current   float32 `json:"current"`
 	Withdrawn float32 `json:"withdrawn"`
 }
 

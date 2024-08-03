@@ -19,7 +19,7 @@ func (r *userRouter) GetBalance(ctx *gin.Context) {
 	}
 
 	response := httpmodels.GetUserBalanceResponse{
-		Balance:   userBalance.Balance,
+		Current:   userBalance.Balance,
 		Withdrawn: userBalance.Withdrawn,
 	}
 
